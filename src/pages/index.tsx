@@ -1,124 +1,133 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
+import * as THREE from "three";
+import { useEffect } from "react";
+import SceneInit from "@/lib/SceneInit";
+import Planet from "@/lib/Planet";
+import Rotation from "@/lib/Rotation";
+import { TextureLoader } from "three";
 
-const inter = Inter({ subsets: ['latin'] })
-
+const x = 4;
 export default function Home() {
+  useEffect(() => {
+    // TODO: Understand this code later.
+    let test = new SceneInit();
+    test.initScene();
+    test.animate();
+
+    const sunGeometry = new THREE.SphereGeometry(50);
+    const sunTexture = new THREE.TextureLoader().load("sun.jpeg");
+    const sunMaterial = new THREE.MeshBasicMaterial({ map: sunTexture });
+    const sunMesh = new THREE.Mesh(sunGeometry, sunMaterial);
+    const solarSystem = new THREE.Group();
+    solarSystem.add(sunMesh);
+    test.scene.add(solarSystem);
+
+    const mercury = new Planet(10, x * 48, "mercury.png");
+    const mercuryMesh = mercury.getMesh();
+    let mercurySystem = new THREE.Group();
+    mercurySystem.add(mercuryMesh);
+
+    const venus = new Planet(13, x * 70, "venus.jpeg");
+    const venusMesh = venus.getMesh();
+    let venusSystem = new THREE.Group();
+    venusSystem.add(venusMesh);
+
+    const earth = new Planet(14, x * 96, "earth.jpeg");
+    const earthMesh = earth.getMesh();
+    let earthSystem = new THREE.Group();
+    earthSystem.add(earthMesh);
+
+    const mars = new Planet(12, x * 120, "mars.jpeg");
+    const marsMesh = mars.getMesh();
+    let marsSystem = new THREE.Group();
+    marsSystem.add(marsMesh);
+
+    const jupiter = new Planet(30, x * 150, "jupiter.jpeg");
+    const jupiterMesh = jupiter.getMesh();
+    let jupiterSystem = new THREE.Group();
+    jupiterSystem.add(jupiterMesh);
+
+    // const saturnRingGeo = new THREE.RingGeometry(10, 20, 32);
+    // const saturnRingMat = new THREE.MeshStandardMaterial({
+    //   map: TextureLoader().load("uranusring.jpeg"),
+    // });
+
+    // const saturnRingGeo = new THREE.RingGeometry(10, 20, 32);
+    //   const texture = new THREE.TextureLoader().load("uranusring.jpeg");
+    //   const material = new THREE.MeshBasicMaterial({ map: texture });
+    //   const mesh = new THREE.Mesh(saturnRingGeo, material);
+    //   const ringmesh =
+
+    const saturn = new Planet(25, x * 190, "saturn.jpeg");
+    const saturnMesh = saturn.getMesh();
+    let saturnSystem = new THREE.Group();
+    saturnSystem.add(saturnMesh);
+
+    const uranus = new Planet(20, x * 220, "uranus.jpeg");
+    const uranusMesh = uranus.getMesh();
+    let uranusSystem = new THREE.Group();
+    uranusSystem.add(uranusMesh);
+
+    const neptune = new Planet(18, x * 240, "neptune.jpeg");
+    const neptuneMesh = neptune.getMesh();
+    let neptuneSystem = new THREE.Group();
+    neptuneSystem.add(neptuneMesh);
+
+    solarSystem.add(
+      mercurySystem,
+      venusSystem,
+      earthSystem,
+      marsSystem,
+      jupiterSystem,
+      saturnSystem,
+      uranusSystem,
+      neptuneSystem
+    );
+
+    const mercuryRotation = new Rotation(mercuryMesh);
+    const mercuryRotationMesh = mercuryRotation.getMesh();
+    mercurySystem.add(mercuryRotationMesh);
+    const venusRotation = new Rotation(venusMesh);
+    const venusRotationMesh = venusRotation.getMesh();
+    venusSystem.add(venusRotationMesh);
+    const earthRotation = new Rotation(earthMesh);
+    const earthRotationMesh = earthRotation.getMesh();
+    earthSystem.add(earthRotationMesh);
+    const marsRotation = new Rotation(marsMesh);
+    const marsRotationMesh = marsRotation.getMesh();
+    marsSystem.add(marsRotationMesh);
+    const jupiterRotation = new Rotation(jupiterMesh);
+    const jupiterRotationMesh = jupiterRotation.getMesh();
+    jupiterSystem.add(jupiterRotationMesh);
+    const saturnRotation = new Rotation(saturnMesh);
+    const saturnRotationMesh = saturnRotation.getMesh();
+    saturnSystem.add(saturnRotationMesh);
+    const uranusRotation = new Rotation(uranusMesh);
+    const uranusRotationMesh = uranusRotation.getMesh();
+    uranusSystem.add(uranusRotationMesh);
+    const neptuneRotation = new Rotation(neptuneMesh);
+    const neptuneRotationMesh = neptuneRotation.getMesh();
+    neptuneSystem.add(neptuneRotationMesh);
+
+    // NOTE: Animate solar system at 60fps.
+    const EARTH_YEAR = 2 * Math.PI * (2 / 60) * (1 / 60);
+    const animate = () => {
+      sunMesh.rotation.y += 0.001;
+      mercurySystem.rotation.y += EARTH_YEAR * 4;
+      venusSystem.rotation.y += EARTH_YEAR * 2;
+      earthSystem.rotation.y += EARTH_YEAR;
+      marsSystem.rotation.y += EARTH_YEAR * 0.8;
+      jupiterSystem.rotation.y += EARTH_YEAR * 0.6;
+      saturnSystem.rotation.y += EARTH_YEAR * 0.4;
+      uranusSystem.rotation.y += EARTH_YEAR * 0.2;
+      neptuneSystem.rotation.y += EARTH_YEAR * 0.1;
+      requestAnimationFrame(animate);
+    };
+    animate();
+  }, []);
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/pages/index.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`${inter.className} mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p
-            className={`${inter.className} m-0 max-w-[30ch] text-sm opacity-50`}
-          >
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`${inter.className} mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p
-            className={`${inter.className} m-0 max-w-[30ch] text-sm opacity-50`}
-          >
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`${inter.className} mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p
-            className={`${inter.className} m-0 max-w-[30ch] text-sm opacity-50`}
-          >
-            Discover and deploy boilerplate example Next.js&nbsp;projects.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`${inter.className} mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p
-            className={`${inter.className} m-0 max-w-[30ch] text-sm opacity-50`}
-          >
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+    <div className="flex flex-col items-center justify-center">
+      <canvas id="myThreeJsCanvas" />
+    </div>
+  );
 }
