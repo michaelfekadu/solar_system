@@ -8,7 +8,6 @@ import { TextureLoader } from "three";
 const x = 4;
 export default function Home() {
   useEffect(() => {
-    // TODO: Understand this code later.
     let test = new SceneInit();
     test.initScene();
     test.animate();
@@ -45,17 +44,6 @@ export default function Home() {
     const jupiterMesh = jupiter.getMesh();
     let jupiterSystem = new THREE.Group();
     jupiterSystem.add(jupiterMesh);
-
-    // const saturnRingGeo = new THREE.RingGeometry(10, 20, 32);
-    // const saturnRingMat = new THREE.MeshStandardMaterial({
-    //   map: TextureLoader().load("uranusring.jpeg"),
-    // });
-
-    // const saturnRingGeo = new THREE.RingGeometry(10, 20, 32);
-    //   const texture = new THREE.TextureLoader().load("uranusring.jpeg");
-    //   const material = new THREE.MeshBasicMaterial({ map: texture });
-    //   const mesh = new THREE.Mesh(saturnRingGeo, material);
-    //   const ringmesh =
 
     const saturn = new Planet(25, x * 190, "saturn.jpeg");
     const saturnMesh = saturn.getMesh();
@@ -108,7 +96,6 @@ export default function Home() {
     const neptuneRotationMesh = neptuneRotation.getMesh();
     neptuneSystem.add(neptuneRotationMesh);
 
-    // NOTE: Animate solar system at 60fps.
     const EARTH_YEAR = 2 * Math.PI * (2 / 60) * (1 / 60);
     const animate = () => {
       sunMesh.rotation.y += 0.001;

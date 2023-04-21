@@ -3,11 +3,17 @@ import * as THREE from "three";
 export default class Rotation {
   planetMesh: any;
   showRotation: any;
-  constructor(planetMesh: any, showRotation = false) {
+  planetPositionX: any;
+  y: any;
+  z: any;
+  mesh: any;
+
+  constructor(planetMesh: any, showRotation = false, mesh?: any) {
     this.planetPositionX = planetMesh.position.x;
     this.y = 0.25;
     this.z = 0.25;
     this.showRotation = showRotation;
+    this.mesh = mesh;
   }
 
   getMesh() {

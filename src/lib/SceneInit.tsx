@@ -12,11 +12,11 @@ export default class SceneInit {
 
   constructor(
     fov = 50,
-    camera: any,
-    scene: any,
-    stats: any,
-    controls: any,
-    renderer: any
+    camera?: any,
+    scene?: any,
+    stats?: any,
+    controls?: any,
+    renderer?: any
   ) {
     this.fov = fov;
     this.scene = scene;
@@ -39,12 +39,9 @@ export default class SceneInit {
 
     this.scene = new THREE.Scene();
 
-    // this.scene.background = new THREE.Color(0xffffff);
-    // const cubeGeometry = new THREE.SphereGeometry(1000);
     const cubeGeometry = new THREE.BoxGeometry(8000, 8000, 8000);
 
     const spaceTexture = new THREE.TextureLoader().load("space.avif");
-    // this.scene.background = spaceTexture;
 
     const cubeMaterial = new THREE.MeshBasicMaterial({
       map: spaceTexture,
@@ -53,44 +50,28 @@ export default class SceneInit {
 
     const cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
 
-    // Add the cubeMesh to the scene
     this.scene.add(cubeMesh);
 
-    // specify a canvas which is already created in the HTML file and tagged by an id
-    // aliasing enabled
     this.renderer = new THREE.WebGLRenderer({
-      canvas: document.getElementById("myThreeJsCanvas"),
+      canvas: document.getElementById("myThreeJsCanvas") as HTMLCanvasElement,
       antialias: true,
     });
+
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(this.renderer.domElement);
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
-    this.stats = Stats();
+    this.stats = new Stats();
     document.body.appendChild(this.stats.dom);
 
-    // ambient light which is for the whole scene
-    // let ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-    // ambientLight.castShadow = false;
-    // this.scene.add(ambientLight);
-
-    // spot light which is illuminating the chart directly
-    // let spotLight = new THREE.SpotLight(0xffffff, 0.55);
-    // spotLight.castShadow = true;
-    // spotLight.position.set(0, 40, 10);
-    // this.scene.add(spotLight);
-
-    // if window resizes
     window.addEventListener("resize", () => this.onWindowResize(), false);
   }
 
   animate() {
-    // requestAnimationFrame(this.animate.bind(this));
     window.requestAnimationFrame(this.animate.bind(this));
     this.render();
     this.stats.update();
-    // this.controls.update();
   }
 
   render() {

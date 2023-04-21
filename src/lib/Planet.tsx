@@ -4,11 +4,13 @@ export default class Planet {
   radius: any;
   positionX: any;
   textureFile: any;
+  mesh: any;
 
-  constructor(radius: any, positionX: any, textureFile: any) {
+  constructor(radius?: any, positionX?: any, textureFile?: any, mesh?: any) {
     this.radius = radius;
     this.positionX = positionX;
     this.textureFile = textureFile;
+    this.mesh = mesh;
   }
 
   getMesh() {
